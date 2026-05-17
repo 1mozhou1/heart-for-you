@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <canvas id="myCanvas" width="600" height="600"></canvas>
+    <script>
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+
+        // 动画状态：缩放因子和变化步长
+        var scale = 1.0;
+        var delta = 0.02;
+
+        // 绘制爱心函数
+        function drawHeart(currentScale) {
+            // 清屏
+            ctx.clearRect(0, 0, 600, 600);
+            // 设置画笔颜色
+            ctx.fillStyle = "pink";
+
+            // 扫描坐标系
+            for (var y = 1.5; y > -1.5; y -= 0.01) {
+                for (var x = -1.5; x < 1.5; x += 0.005) {
+                    var sx = x / currentScale;
+                    var sy = y / currentScale;
+                    var z = sx * sx + sy * sy - 1;
+                    // 爱心公式判断
+                    if (z * z * z - sx * sx * sy * sy * sy <= 0.0) {
+                        // 坐标映射到画布
+                        var px = (sx + 1.5) * 110;
+                        var py = (1.5 - sy) * 110;
+                        // 画一个 2x2 像素小方块
+                        ctx.fillRect(px, py,5, 5);
+                    }
+                }
+            }
+        }
+
+        // 动画循环
+        function animate() {
+            drawHeart(scale);
+            scale += delta;
+            if (scale > 1.2|| scale < 0.5) {
+                delta = -delta;
+            }
+            requestAnimationFrame(animate);
+        }
+
+        // 启动动画
+        animate();
+    </script>
+</body>
+</html>
