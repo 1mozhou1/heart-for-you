@@ -13,29 +13,31 @@
         var canvas = document.getElementById('myCanvas');
         var ctx = canvas.getContext('2d');
 
-        // --- 1. 配置参数 ---
-        var totalFrames = 4;        // 你有多少张图片
-        var frameInterval = 100;     // 每100毫秒切换一张（播放速度）
-        var currentFrame = 0;        // 当前播放到哪一帧
-
-        // --- 2. 加载所有图片到一个数组里 ---
+        var totalFrames = 12;
+        var frameInterval = 100;
+        var currentFrame = 0;
         var frames = [];
         var loadedCount = 0;
+
+        // 加载所有图片
         for (var i = 1; i <= totalFrames; i++) {
             var img = new Image();
             img.onload = function() {
                 loadedCount++;
+                // 每加载完一张，就检查一次是否全部就绪
+                if (loadedCount === totalFrames) {
+                    startAnimation();
+                }
             };
-            img.src = 'flower_' + i + '.png'; // 文件名：flower_1.png 等
+            img.onerror = function() {
+                console.error('图片加载失败: ' + this.src);
+            };
+            img.src = 'flower_' + i + '.png';
             frames.push(img);
         }
 
-        // --- 3. 启动和播放动画 ---
+        // 图片全部加载完毕后，才开始播放动画
         function startAnimation() {
-            if (loadedCount < totalFrames) {
-                setTimeout(startAnimation, 50); // 图片没加载完就再等一等
-                return;
-            }
             playFrame();
         }
 
@@ -45,8 +47,6 @@
             currentFrame = (currentFrame + 1) % totalFrames;
             setTimeout(playFrame, frameInterval);
         }
-
-        startAnimation();
     </script>
 </body>
 </html>
