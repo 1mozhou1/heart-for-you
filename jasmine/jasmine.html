@@ -13,14 +13,14 @@
         var canvas = document.getElementById('myCanvas');
         var ctx = canvas.getContext('2d');
 
-        var totalFrames = 10;
+        var totalFrames = 4;
         var frameInterval = 100;
         var currentFrame = 0;
         var frames = [];
         var loadedCount = 0;
 
         // 加载所有图片
-        for (var i = 5; i <= totalFrames; i++) {
+        for (var i = 1; i <= totalFrames; i++) {
             var img = new Image();
             img.onload = function() {
                 loadedCount++;
