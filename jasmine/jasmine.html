@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>茉莉花开</title>
+    <style>
+        body { background-color: #f5f5f5; }
+    </style>
+</head>
+<body>
+    <canvas id="myCanvas" width="400" height="400"></canvas>
+    <script>
+        var canvas = document.getElementById('myCanvas');
+        var ctx = canvas.getContext('2d');
+
+        // --- 1. 配置参数 ---
+        var totalFrames = 4;        // 你有多少张图片
+        var frameInterval = 100;     // 每100毫秒切换一张（播放速度）
+        var currentFrame = 0;        // 当前播放到哪一帧
+
+        // --- 2. 加载所有图片到一个数组里 ---
+        var frames = [];
+        var loadedCount = 0;
+        for (var i = 1; i <= totalFrames; i++) {
+            var img = new Image();
+            img.onload = function() {
+                loadedCount++;
+            };
+            img.src = 'flower_' + i + '.png'; // 文件名：flower_1.png 等
+            frames.push(img);
+        }
+
+        // --- 3. 启动和播放动画 ---
+        function startAnimation() {
+            if (loadedCount < totalFrames) {
+                setTimeout(startAnimation, 50); // 图片没加载完就再等一等
+                return;
+            }
+            playFrame();
+        }
+
+        function playFrame() {
+            ctx.clearRect(0, 0, 400, 400);
+            ctx.drawImage(frames[currentFrame], 0, 0, 400, 400);
+            currentFrame = (currentFrame + 1) % totalFrames;
+            setTimeout(playFrame, frameInterval);
+        }
+
+        startAnimation();
+    </script>
+</body>
+</html>
