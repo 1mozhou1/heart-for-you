@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>520爱心</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+          background: linear-gradient(to bottom, #1a1a2e, #2d1b3d);
+        }
+        #fallingHearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .falling-heart {
+            position: absolute;
+            font-size: 24px;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 飘落爱心容器 -->
+    <div id="fallingHearts"></div>
+    
+    <!-- 中央跳动大爱心 -->
+    <div style="display:flex; justify-content:center; align-items:center; height:100vh;">
+        <canvas id="myCanvas" width="1000" height="1000"></canvas>
+    </div>
+    
+    <script>
+        // ========== 飘落小爱心 ==========
+        var heartsContainer = document.getElementById('fallingHearts');
+        var heartEmojis = ['❤️', '💕', '💗', '💖', '🤍'];
+        
+        function createFallingHeart() {
+            var heart = document.createElement('span');
+            heart.className = 'falling-heart';
+            heart.innerHTML = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+            heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            heart.style.animationDelay = Math.random() * 2 + 's';
+            heartsContainer.appendChild(heart);
+            
+            // 动画结束后移除元素
+            setTimeout(function() {
+                heart.remove();
+            }, parseFloat(heart.style.animationDuration) * 1000 + 2000);
+        }
+        
+        // 每0.3秒生成一颗新爱心
+        setInterval(createFallingHeart, 300);
+        // 初始先创建几颗
+        for (var i = 0; i < 10; i++) {
+            setTimeout(createFallingHeart, i * 200);
+        }
+
+        // ========== 中央跳动大爱心（你原来的代码） ==========
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+        var scale = 1.0;
+        var delta = 0.02;
+
+        function drawHeart(currentScale) {
+            ctx.clearRect(0, 0, 1000, 1000);
+            ctx.fillStyle = "#ff69b4";
+            for (var y = 1.5; y > -1.5; y -= 0.01) {
+                for (var x = -1.5; x < 1.5; x += 0.005) {
+                    var sx = x / currentScale;
+                    var sy = y / currentScale;
+                    var z = sx * sx + sy * sy - 1;
+                    if (z * z * z - sx * sx * sy * sy * sy <= 0.0) {
+                        var offsetX = 80;  // 水平偏移量
+var offsetY = 80;  // 垂直偏移量
+var px = (sx + 1.5) * 200 + offsetX;
+var py = (1.5 - sy) * 200 + offsetY;
+                        ctx.fillRect(px, py, 5, 5);
+                    }
+                }
+            }
+           ctx.fillStyle = "#ffb6c1";  // 浅粉色，和爱心呼应
+ctx.font = "bold 48px Arial";  // 加大加粗
+ctx.textAlign = "center";
+ctx.fillText("520", 500, 920);  // 稍微调整位置
+        }
+
+        function animate() {
+            drawHeart(scale);
+            scale += delta;
+            if (scale > 1.2 || scale < 0.5) delta = -delta;
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
